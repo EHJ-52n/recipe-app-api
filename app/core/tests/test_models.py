@@ -22,3 +22,15 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_superuser)
 
+    def test_new_user_email_normalized(self):
+        """Test email is normalized for new users."""
+        sample_emails = [
+            ['test1@EXAMPLE.com', 'test1@example.com'],
+            ['Test2@Example.com', 'Test2@example.com'],
+            ['TEST3@EXAMPLE.COM', 'TEST3@example.com'],
+            ['test4@example.COM', 'test4@example.com'],
+        ]
+
+        for email, expected in sample_emails:
+            user = get_user_model().objects.create_user(email, 'sample123')
+            self.assertEqual(user.email, expected)
